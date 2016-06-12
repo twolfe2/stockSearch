@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Lookup</title>
+    <link rel="stylesheet" href="/depen/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/depen/xigniteTypeahead.css">
+    <!-- <link rel="stylesheet" href="/depen/jquery-ui.min.css"> -->
+    <link rel="stylesheet" href="style.css">
+    <script src="/depen/jquery-3.0.0.min.js"></script>
+    <script src="/depen/jquery-ui.min.js"></script>
+    <script src="/depen/jquery.xigniteTypeahead.min.js"></script>
+    <script src="/bower_components/moment/moment.js"></script>
+    <script src="/depen/moment-msdate.js"></script>
+    <script src="main.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-xs-12 col-md-offset-5">
+            <h1>Stock Search</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5 col-xs-12 col-md-offset-4">
+            <div class="input-group">
+                <input type="text" class="form-control xignite-typeahead" id="symbol" data-xignite-typeahead-key="XigniteGlobalQuotes.GetGlobalDelayedQuote.Identifier" autocomplete="off" placeholder="Start Typing Name or Symbol">
+                <span class="input-group-btn">
+          <br><button class="btn btn-default" id="symbolSearch">Search</button>
+        </span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="table-responsive">
+        <div ><h3 class="name"></h3></div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Last Price</th>
+                        <th>Change</th>
+                        <th>Change Percent</th>
+                        <th>Change Percent YTD</th>
+                        <th>Last Traded</th>
+                    </tr>
+                    <tbody class="stockInfo">
+                        <tr>
+                            <td class="price"></td>
+                            <td class="change"></td>
+                            <td class="changePercent"></td>
+                            <td class="YTD"></td>
+                            <td class="lastTrade"></td>
+                        </tr>
+                    </tbody>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<body>
+</body>
+
+</html>
