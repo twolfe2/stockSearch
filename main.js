@@ -14,7 +14,7 @@ function init() {
         }
     });
 
-    $('.xignite-typeahead').xigniteTypeahead({ api: 'http://search.xignite.com/Search/Suggest', keyParam: 'parameter', q: 'term' });
+    // $('.xignite-typeahead').xigniteTypeahead({ api: 'http://search.xignite.com/Search/Suggest', keyParam: 'parameter', q: 'term' });
     $('#symbolSearch').on('click', symbolSearch);
 
 }
