@@ -76,6 +76,12 @@ function getOverview(quoteURL, symbol) {
                 var momentDate = moment.fromOADate(data.MSDate).format('llll');
                 $('.lastTrade').text(momentDate);
 
+                $('.change').removeClass('btn-success');
+                $('.change').removeClass('btn-danger');
+                $('.changePercent').removeClass('btn-success');
+                $('.changePercent').removeClass('btn-danger');
+                $('.YTD').removeClass('btn-success');
+                $('.YTD').removeClass('btn-danger');
 
                 change > 0 ? $('.change').addClass('btn-success') : $('.change').addClass('btn-danger');
                 changePercent > 0 ? $('.changePercent').addClass('btn-success') : $('.changePercent').addClass('btn-danger');
@@ -99,7 +105,7 @@ function getOverview(quoteURL, symbol) {
 
 //modified version of https://github.com/markitondemand/DataApis/blob/master/MarkitTimeseriesServiceSample.js
 function getChart(chartURL, symbol) {
-    var numDays = 10000;
+    var numDays = 6500;
     var symbol = symbol;
     var params = { parameters: JSON.stringify(getInputParams(symbol, numDays)) };
     $.ajax({
