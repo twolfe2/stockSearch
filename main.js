@@ -11,6 +11,8 @@ function init() {
             e.preventDefault();
             $('#symbol').val($('.selected').data("xigniteTypeaheadValue"));
 
+        } else if(e.keyCode == 13) {
+          $('#symbolSearch').click();
         }
     });
 
@@ -116,6 +118,7 @@ function getChart(chartURL, symbol) {
 
         },
         error: function(error) {
+          // debugger;
             console.log(error.status);
             $('#symbolSearch').text('Search');
             $('#symbolSearch').attr('disabled', false);
