@@ -10,8 +10,11 @@ function init() {
 
             e.preventDefault();
             $('#symbol').val($('.selected').data("xigniteTypeaheadValue"));
+            // debugger;
+             $('#symbolSearch').focus();
 
         } else if(e.keyCode == 13) {
+          $('#symbol').val($('.selected').data("xigniteTypeaheadValue"));
           $('#symbolSearch').click();
         }
     });
@@ -30,7 +33,7 @@ function init() {
 
 
 function symbolSearch() {
-    var symbol = $('#symbol').val();
+    var symbol = $('#symbol').val().toUpperCase();
     // console.log(symbol);
     var quoteURL = 'http://dev.markitondemand.com/Api/v2/Quote/jsonp';
     var chartURL = 'http://dev.markitondemand.com/Api/v2/InteractiveChart/jsonp';
