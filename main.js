@@ -92,7 +92,7 @@ function getOverview(quoteURL, symbol) {
 
 //modified version of https://github.com/markitondemand/DataApis/blob/master/MarkitTimeseriesServiceSample.js
 function getChart(chartURL, symbol) {
-    var numDays = 360;
+    var numDays = 10000;
     var symbol = symbol;
     var params = { parameters: JSON.stringify(getInputParams(symbol, numDays)) };
     $.ajax({
@@ -114,7 +114,8 @@ function getChart(chartURL, symbol) {
 
         },
         error: function(error) {
-          console.log(error);
+          console.log(error.status);
+          $('#symbolSearch').attr('disabled',false);
         }
     })
 
