@@ -42,10 +42,10 @@ function symbolSearch() {
 
 function getOverview(quoteURL, symbol) {
     $.ajax(quoteURL, {
-      beforeSend: function() {
-        $('#symbolSearch').html('<i class="fa fa-refresh fa-spin fa-fw"></i><span class="sr-only">Loading...</span>');
-        $('#symbolSearch').attr('disabled',true);
-      },
+        beforeSend: function() {
+            $('#symbolSearch').html('<i class="fa fa-refresh fa-spin fa-fw"></i><span class="sr-only">Loading...</span>');
+            $('#symbolSearch').attr('disabled', true);
+        },
         data: {
             symbol: symbol
         },
@@ -76,14 +76,16 @@ function getOverview(quoteURL, symbol) {
                 changePercent > 0 ? $('.changePercent').addClass('btn-success') : $('.changePercent').addClass('btn-danger');
                 YTD > 0 ? $('.YTD').addClass('btn-success') : $('.YTD').addClass('btn-danger');
 
-                $('.stockInfo').show();
-                
+                $('.mainTable').show();
+
             }
 
         },
 
         error: function(error) {
-            alert('There was an error processing your request. Please try again.')
+            alert('There was an error processing your request. Please try again.');
+            $('#symbolSearch').text('Search');
+            $('#symbolSearch').attr('disabled', false);
         }
     });
 }
@@ -108,14 +110,15 @@ function getChart(chartURL, symbol) {
                 console.log("Error:", data.Message)
                 return;
             }
-            renderChart(data,symbol);
+            renderChart(data, symbol);
             $('#symbolSearch').text('Search');
-            $('#symbolSearch').attr('disabled',false);
+            $('#symbolSearch').attr('disabled', false);
 
         },
         error: function(error) {
-          console.log(error.status);
-          $('#symbolSearch').attr('disabled',false);
+            console.log(error.status);
+            $('#symbolSearch').text('Search');
+            $('#symbolSearch').attr('disabled', false);
         }
     })
 
@@ -124,7 +127,7 @@ function getChart(chartURL, symbol) {
 }
 
 
-function renderChart(data,symbol) {
+function renderChart(data, symbol) {
     // console.log(data);
     var ohlc = getOHLC(data);
     var volume = getVolume(data);
@@ -169,7 +172,7 @@ function renderChart(data,symbol) {
 
         series: [{
             type: 'candlestick',
-            name:symbol,
+            name: symbol,
             data: ohlc,
             dataGrouping: {
                 units: groupingUnits
