@@ -6,6 +6,8 @@
     <title>Stock Lookup</title>
     <link rel="stylesheet" href="/depen/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="/depen/xigniteTypeahead.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+            
     <!-- <link rel="stylesheet" href="/depen/jquery-ui.min.css"> -->
     <link rel="stylesheet" href="style.css">
     <script src="/depen/jquery-3.0.0.min.js"></script>
@@ -13,9 +15,11 @@
     <script src="/depen/jquery.xigniteTypeahead.min.js"></script>
     <script src="/bower_components/moment/moment.js"></script>
     <script src="/depen/moment-msdate.js"></script>
+    <script src="http://code.highcharts.com"></script>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <!-- <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script> -->
     <script src="main.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
 </head>
 <div class="container">
     <div class="row">
@@ -35,7 +39,8 @@
     </div>
     <div class="row">
         <div class="table-responsive">
-        <div ><h3 class="name"></h3></div>
+            <div>
+                <h3 class="name"></h3></div>
             <table class="table">
                 <thead>
                     <tr>
@@ -56,6 +61,11 @@
                     </tbody>
                 </thead>
             </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div id="chartContainer"></div>
         </div>
     </div>
 </div>
