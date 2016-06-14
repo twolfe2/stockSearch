@@ -1,26 +1,65 @@
 'use strict';
-
+// var charts = [];
+// var length = 0;
 $(document).ready(init);
 
 
 function init() {
 
-    $('#symbol').on('keydown', function(e) {
-        if (e.keyCode === 9) {
 
-            e.preventDefault();
-            $('#symbol').val($('.selected').data("xigniteTypeaheadValue"));
-            // debugger;
-             $('#symbolSearch').focus();
+    var searchURL = 'http://search.xignite.com/Search/Suggest?parameter=XigniteFinancials.GetCompanyBalanceSheet.Identifier';
+    $('#stockNames').select2({
+        placeholder: "Type in the compaines you would like to compare",
+        theme: 'bootstrap',
+        tags: true,
+        multiple: true,
+        tokenSeperators: [',', ' '],
+        minimumInputLength: 1,
+        ajax: {
+            url: searchURL,
+            dataType: "json",
+            data: function(params) {
 
-        } else if(e.keyCode == 13) {
-          $('#symbol').val($('.selected').data("xigniteTypeaheadValue"));
-          $('#symbolSearch').click();
-        }
+                return {
+                    term: params.term
+                }
+
+            },
+            processResults: function(data) {
+                return {
+                    results: $.map(data.Results, function(item) {
+                        // debugger;
+                        return {
+                            text: item.Text,
+                            id: item.Value
+                        }
+                    })
+                };
+            }
+        },
+
+
+
+
     });
 
 
-    $('.xignite-typeahead').xigniteTypeahead({ api: 'http://search.xignite.com/Search/Suggest', keyParam: 'parameter', q: 'term' });
+    // $('#symbol').on('keydown', function(e) {
+    //     if (e.keyCode === 9) {
+
+    //         e.preventDefault();
+    //         $('#symbol').val($('.selected').data("xigniteTypeaheadValue"));
+    //         // debugger;
+    //         $('#symbolSearch').focus();
+
+    //     } else if (e.keyCode == 13) {
+    //         $('#symbol').val($('.selected').data("xigniteTypeaheadValue"));
+    //         $('#symbolSearch').click();
+    //     }
+    // });
+
+
+    // $('.xignite-typeahead').xigniteTypeahead({ api: 'http://search.xignite.com/Search/Suggest', keyParam: 'parameter', q: 'term' });
 
     $('#symbolSearch').on('click', symbolSearch);
 
@@ -33,106 +72,163 @@ function init() {
 
 
 function symbolSearch() {
-    var symbol = $('#symbol').val().toUpperCase();
+    var symbols = $('#stockNames').val();
+
+    //make sure all symbols are upper case
+    symbols = symbols.map(function(sym) {
+        return sym.toUpperCase();
+    });
+
     // console.log(symbol);
     var quoteURL = 'http://dev.markitondemand.com/Api/v2/Quote/jsonp';
     var chartURL = 'http://dev.markitondemand.com/Api/v2/InteractiveChart/jsonp';
 
-    getOverview(quoteURL, symbol);
-    getChart(chartURL, symbol);
+    getOverview(quoteURL, symbols);
+
+
+    getChart(chartURL, symbols);
 
 
 }
 
 
-function getOverview(quoteURL, symbol) {
-    $.ajax(quoteURL, {
-        beforeSend: function() {
-            $('#symbolSearch').html('<i class="fa fa-refresh fa-spin fa-fw"></i><span class="sr-only">Loading...</span>');
-            $('#symbolSearch').attr('disabled', true);
-        },
-        data: {
-            symbol: symbol
-        },
-        dataType: 'jsonp',
+function getOverview(quoteURL, symbols) {
+    var output = [];
+    var length = symbols.length;
+    symbols.forEach((symbol) => {
+        $.ajax(quoteURL, {
+            beforeSend: function() {
+                $('#symbolSearch').html('<i class="fa fa-refresh fa-spin fa-fw"></i><span class="sr-only">Loading...</span>');
+                $('#symbolSearch').attr('disabled', true);
+            },
+            data: {
+                symbol: symbol
+            },
+            dataType: 'jsonp',
+            //so we don't reach api limit
+            timeout: 1500,
 
-        success: function(data) {
-            // debugger;
-            if (Object.keys(data).length === 1) {
-                alert('Error. Please make sure you entered a valid symbol.');
-            } else {
-                $('.name').text(data.Name);
-                $('.price').text(data.LastPrice);
+            success: function(data) {
+                if (Object.keys(data).length === 1) {
+                    alert('Error. Please make sure you entered valid symbols.');
+                    return;
+                }
+
+                var $tr = $('.template').clone();
+                $tr.removeClass('template');
+
+
+                // debugger;
+
+                $tr.find('.name').text(data.Name);
+                $tr.find('.price').text(data.LastPrice);
 
                 var change = data.Change.toFixed(3);
-                $('.change').text(change);
+                $tr.find('.change').text(change);
 
                 var changePercent = data.ChangePercent.toFixed(3);
-                $('.changePercent').text(changePercent);
+                $tr.find('.changePercent').text(changePercent);
 
                 var YTD = data.ChangePercentYTD.toFixed(3);
-                $('.YTD').text(YTD);
+                $tr.find('.YTD').text(YTD);
 
                 var momentDate = moment.fromOADate(data.MSDate).format('llll');
-                $('.lastTrade').text(momentDate);
+                $tr.find('.lastTrade').text(momentDate);
 
-                $('.change').removeClass('btn-success');
-                $('.change').removeClass('btn-danger');
-                $('.changePercent').removeClass('btn-success');
-                $('.changePercent').removeClass('btn-danger');
-                $('.YTD').removeClass('btn-success');
-                $('.YTD').removeClass('btn-danger');
+                $tr.find('.change').removeClass('btn-success btn-danger');
+                $tr.find('.changePercent').removeClass('btn-success btn-danger');
+                $tr.find('.YTD').removeClass('btn-success btn-danger');
 
-                change > 0 ? $('.change').addClass('btn-success') : $('.change').addClass('btn-danger');
-                changePercent > 0 ? $('.changePercent').addClass('btn-success') : $('.changePercent').addClass('btn-danger');
-                YTD > 0 ? $('.YTD').addClass('btn-success') : $('.YTD').addClass('btn-danger');
 
-                $('.mainTable').show();
+                change > 0 ? $tr.find('.change').addClass('btn-success') : $tr.find('.change').addClass('btn-danger');
+                changePercent > 0 ? $tr.find('.changePercent').addClass('btn-success') : $tr.find('.changePercent').addClass('btn-danger');
+                YTD > 0 ? $tr.find('.YTD').addClass('btn-success') : $tr.find('.YTD').addClass('btn-danger');
+                // debugger;
+                length--;
 
+                //wait one second so we don't hit api limit
+                output.push($tr)
+
+                //must delay this until all ajax calls are complete
+                if (length === 0) {
+                    $('.stockInfo').empty().append(output);
+                    $('.mainTable').show();
+                }
+
+
+            },
+
+
+
+            error: function(error) {
+                console.log('API rate limit reached. Please wait and try again');
+                $('#symbolSearch').text('Search');
+                $('#symbolSearch').attr('disabled', false);
             }
+        });
 
-        },
 
-        error: function(error) {
-            alert('There was an error processing your request. Please try again.');
-            $('#symbolSearch').text('Search');
-            $('#symbolSearch').attr('disabled', false);
-        }
-    });
+
+
+
+
+    })
 }
 
 
 
 //modified version of https://github.com/markitondemand/DataApis/blob/master/MarkitTimeseriesServiceSample.js
-function getChart(chartURL, symbol) {
-    var numDays = 6500;
-    var symbol = symbol;
-    var params = { parameters: JSON.stringify(getInputParams(symbol, numDays)) };
-    $.ajax({
-        beforeSend: function() {
-            $('#chartContainer').html('');
-        },
-        data: params,
-        url: chartURL,
-        dataType: "jsonp",
-        success: function(data) {
-            // debugger;
-            if (!data || data.Message) {
-                console.log("Error:", data.Message)
-                return;
-            }
-            renderChart(data, symbol);
-            $('#symbolSearch').text('Search');
-            $('#symbolSearch').attr('disabled', false);
+function getChart(chartURL, symbols) {
 
-        },
-        error: function(error) {
-          // debugger;
-            console.log(error.status);
-            $('#symbolSearch').text('Search');
-            $('#symbolSearch').attr('disabled', false);
-        }
-    })
+    var length = symbols.length;
+    var charts = [];
+    // console.log(length);
+    var numDays = 1000;
+    $('#charts').empty();
+
+    symbols.forEach(symbol => {
+        var params = { parameters: JSON.stringify(getInputParams(symbol, numDays)) };
+        $.ajax({
+            beforeSend: function() {
+                $('#chartContainer').html('');
+            },
+            data: params,
+            url: chartURL,
+            timeout: 5000,
+            dataType: "jsonp",
+            success: function(data) {
+                // debugger;
+                if (!data || data.Message) {
+                    console.log("Error:", data.Message)
+                    return;
+                }
+                charts.push(renderChart(data, symbol));
+                // debugger;
+                // console.log(length);
+                length--;
+                if (length === 0) {
+                    $('#symbolSearch').text('Search');
+                    $('#symbolSearch').attr('disabled', false);
+                    $('#charts').append(charts);
+                    window.dispatchEvent(new Event('resize'));
+                    // $(window).trigger('resize');
+                    // var width = $('.candleGraphs').css("width");
+                    // $('.highcharts-container').css("width", width);
+
+                }
+
+            },
+            error: function(error) {
+                debugger;
+                console.log(error);
+                $('#symbolSearch').text('Search');
+                $('#symbolSearch').attr('disabled', false);
+
+            }
+        })
+
+
+    });
 
 
 
@@ -153,9 +249,10 @@ function renderChart(data, symbol) {
             'month', [1, 2, 3, 4, 6]
         ]
     ];
+    var $chart = $('<div class="col-md-6 col-lg-6 col-xs-6 candleGraphs"><div class="col-md-12">');
 
     // create the chart
-    $('#chartContainer').highcharts('StockChart', {
+    $chart.highcharts('StockChart', {
 
         rangeSelector: {
             selected: 1
@@ -202,6 +299,13 @@ function renderChart(data, symbol) {
             enabled: false
         }
     });
+    // length--;
+    // charts.push($chart);
+    // if(length === 0) { 
+
+    // $('#charts').append(charts);
+    // }
+    return $chart;
 
 }
 

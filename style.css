@@ -28,3 +28,30 @@
 .mainTable {
     display: none;
 }
+
+.template {
+    display:none;
+}
+
+.highcharts-container {
+    border: 1px solid #337ab7;
+    border-radius: 4px;
+    /*width:95%;*/
+    /*position: relative;*/
+}
+
+/* bootstrap hack: fix content width inside hidden tabs */
+/*.tab-content > .tab-pane:not(.active),
+.pill-content > .pill-pane:not(.active) {
+    display: block;
+    height: 0;
+    overflow-y: hidden;
+} */
+
+/*.candleGraphs {
+    float: left;
+    display: inline-block;
+}
+/*#stockNames {
+    display: block;
+}*/
