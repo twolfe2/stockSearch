@@ -146,7 +146,6 @@ function getOverview(quoteURL, symbols) {
                 // debugger;
                 length--;
 
-                //wait one second so we don't hit api limit
                 output.push($tr)
 
                 //must delay this until all ajax calls are complete
@@ -161,7 +160,11 @@ function getOverview(quoteURL, symbols) {
 
 
             error: function(error) {
-                console.log('API rate limit reached. Please wait and try again');
+                if(error.status === 501) { 
+                    console.log('API rate limit reached. Please wait and try again');
+
+                }
+                console.log(error.status);
                 $('#symbolSearch').text('Search');
                 $('#symbolSearch').attr('disabled', false);
             }
@@ -219,8 +222,11 @@ function getChart(chartURL, symbols) {
 
             },
             error: function(error) {
-                debugger;
-                console.log(error);
+                // debugger;
+                if(error.status === 501) {
+                    console.log('API rate limit reached. Please wait and try again');
+                }
+                console.log(error.status);
                 $('#symbolSearch').text('Search');
                 $('#symbolSearch').attr('disabled', false);
 
@@ -249,7 +255,13 @@ function renderChart(data, symbol) {
             'month', [1, 2, 3, 4, 6]
         ]
     ];
-    var $chart = $('<div class="col-md-6 col-lg-6 col-xs-6 candleGraphs"><div class="col-md-12">');
+    var $chart = $('<div class="col-md-6 col-lg-6 col-xs-6 candleGraphs">');
+    var count = 0;
+
+    if(count%2 === 0) {
+        $chart.append('<div class="row">');
+
+    }
 
     // create the chart
     $chart.highcharts('StockChart', {
