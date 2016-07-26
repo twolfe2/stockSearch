@@ -82,7 +82,7 @@ function symbolSearch() {
   });
 
   // console.log(symbol);
-  var quoteURL = 'https://dev.markitondemand.com/Api/v2/Quote/jsonp';
+  var quoteURL = 'http://dev.markitondemand.com/Api/v2/Quote/jsonp';
   
 
   // $('#charts').hide();
@@ -125,7 +125,7 @@ function getOverview(quoteURL, symbols) {
             $('#symbolSearch').attr('disabled', false);
             return;
           }
-          var chartURL = 'https://dev.markitondemand.com/Api/v2/InteractiveChart/jsonp';
+          var chartURL = 'http://dev.markitondemand.com/Api/v2/InteractiveChart/jsonp';
           getChart(chartURL, symbols);
           var $tr = $('.template').clone();
           $tr.removeClass('template');
