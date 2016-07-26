@@ -19,6 +19,9 @@
     white-space: nowrap;
      vertical-align: none; 
 }*/
+#symbolSearch {
+    width: 70px;
+}
 
 .row {
     padding-top: 2%;
@@ -33,6 +36,10 @@
     display:none;
 }
 
+/*#charts {
+    display: none;
+}
+*/
 .highcharts-container {
     border: 1px solid #337ab7;
     border-radius: 4px;
