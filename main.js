@@ -7,7 +7,7 @@ $(document).ready(init);
 function init() {
 
 
-  var searchURL = 'http://search.xignite.com/Search/Suggest?parameter=XigniteFinancials.GetCompanyBalanceSheet.Identifier';
+  var searchURL = 'https://search.xignite.com/Search/Suggest?parameter=XigniteFinancials.GetCompanyBalanceSheet.Identifier';
   $('#stockNames').select2({
     placeholder: "Type in the compaines you would like to compare",
     theme: 'bootstrap',
@@ -82,7 +82,7 @@ function symbolSearch() {
   });
 
   // console.log(symbol);
-  var quoteURL = 'http://dev.markitondemand.com/Api/v2/Quote/jsonp';
+  var quoteURL = 'https://dev.markitondemand.com/Api/v2/Quote/jsonp';
   
 
   // $('#charts').hide();
@@ -125,7 +125,7 @@ function getOverview(quoteURL, symbols) {
             $('#symbolSearch').attr('disabled', false);
             return;
           }
-          var chartURL = 'http://dev.markitondemand.com/Api/v2/InteractiveChart/jsonp';
+          var chartURL = 'https://dev.markitondemand.com/Api/v2/InteractiveChart/jsonp';
           getChart(chartURL, symbols);
           var $tr = $('.template').clone();
           $tr.removeClass('template');
