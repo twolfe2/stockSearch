@@ -246,7 +246,7 @@ function getChart(chartURL, symbols) {
       error: function(error) {
         // debugger;
         if (error.status == 404) {
-          $('#charts').empty().append('<div class="alert alert-danger" role="alert">API Rate limit reached. Please wait a minute and then try again.</div>');
+          $('#charts').append('<div class="alert alert-danger" role="alert">API Rate limit reached. Please wait a minute and then try again.</div>');
           console.log('API rate limit reached. Please wait and try again');
         }
         console.log(error.status);
